@@ -1,0 +1,24 @@
+{
+  "name": "questionsandanswers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hratx52-shortcrust/QuestionsAndAnswers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hratx52-shortcrust/QuestionsAndAnswers/issues"
+  },
+  "homepage": "https://github.com/hratx52-shortcrust/QuestionsAndAnswers#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "pg-promise": "^10.8.1"
+  }
+}
