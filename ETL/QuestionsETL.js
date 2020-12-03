@@ -29,20 +29,46 @@ fs.readFile('./CSV/questions.csv', 'utf8', (err, data) => {
   } else {
     var convertToArray = (csvFileData) => {
       var result = [];
-      data = data.split('\n')
-      for (var i = 0; i < data.length; i++) {
-        //need to account for comma in a question
-        var singleItem = data[i].split(',')
-        if (singleItem[0] === '"' && singleItem[singleItem.length - 1] !== '"') {
-
-        }
+      singleEntries = csvFileData.split('\n')
+      for (var i = 0; i < singleEntries.length; i++) {
+        var singleItem = singleEntries[i].split(',')
         result.push(singleItem);
       }
       return result;
     }
     transformedData = convertToArray(data);
-    for (var i = 1; i < transformedData.length; i++) {
-
+    //if question has a comma, rejoin and insert into db
+    for (var k = 1; k < transformedData.length; k++) {
+      while (transformedData[k].length > 8) {
+        var combined = transformedData[k][2] + ',' + transformedData[k][3]
+        transformedData[k].splice(2, 2, combined)
+      }
+      db.none('INSERT INTO questions(product_id, body, date_written, asker_name, asker_email, reported, helpful) VALUES(${product_id}, ${body}, ${date_written}, ${asker_name}, ${asker_email}, ${reported}, ${helpful})', {
+        product_id: transformedData[k][1],
+        body: transformedData[k][2],
+        date_written: transformedData[k][3],
+        asker_name: transformedData[k][4],
+        asker_email: transformedData[k][5],
+        reported: transformedData[k][6],
+        helpful: transformedData[k][7]
+      })
     }
   }
 })
+
+console.log(db);
+/*
+
+[
+  '26',
+  '3',
+  '"I\'m allergic to dye #17',
+  ' does this product contain any?"',
+  '"2018-10-08"',
+  '"rhcp81"',
+  '"first.last@gmail.com"',
+  '0',
+  '0'
+],
+
+*/
