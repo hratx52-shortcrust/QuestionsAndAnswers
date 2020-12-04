@@ -2,10 +2,11 @@
   "name": "questionsandanswers",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "./server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --max-old-space-size=10000 server.js"
+    "start": "nodemon ./server/server.js",
+    "checkQueries": "node ./database/questionsQuery.js"
   },
   "repository": {
     "type": "git",
