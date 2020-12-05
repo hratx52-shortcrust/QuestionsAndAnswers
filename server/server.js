@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-const { getQuestions, getAnswers, postQuestion, postAnswer } = require('../database/questionsQuery')
+const { getQuestions, getAnswers, postQuestion, postAnswer, putQuestionHelpfulness } = require('../database/questionsQuery')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,39 +59,34 @@ app.post('/qa/questions/:question_id/answers', async (req, res) => {
 
   res.sendStatus(postedAnswer);
 
-  // Body parameters: {
-  //   body,
-  //   name,
-  //   email,
-  //   photos
-  // }
-
-  //response status 201
 });
 
 //Mark Question as Helpful
-app.put('/qa/questions/:question_id/helpful', (req, res) => {
+app.put('/qa/questions/:question_id/helpful', async (req, res) => {
   let questionID = req.params.question_id;
+  var updatedQuestionHelpfulness = await putQuestionHelpfulness(questionID)
+
+  res.sendStatus(updatedQuestionHelpfulness);
 
   //response status 204
 });
 
 //Report Question
-app.put('/qa/questions/:question_id/report', (req, res) => {
+app.put('/qa/questions/:question_id/report', async (req, res) => {
   let questionID = req.params.question_id;
 
   //response status 204
 });
 
 //Mark Answer as Helpful
-app.put('/qa/answers/:answer_id/helpful', (req, res) => {
+app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
   let answerID = req.params.question_id;
 
   //response status 204
 });
 
 //Report Answer
-app.put('/qa/questions/:answer_id/report', (req, res) => {
+app.put('/qa/questions/:answer_id/report', async (req, res) => {
   let answerID = req.params.question_id;
 
   //response status 204

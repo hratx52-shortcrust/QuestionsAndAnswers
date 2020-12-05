@@ -61,9 +61,31 @@ var postAnswer = async (questionID, answer) => {
     })
 };
 
+var putQuestionHelpfulness = async (questionID) => {
+  return db.any('SELECT question_helpfulness FROM questions WHERE question_id = $1', [questionID])
+    .then(async (question) => {
+      return question[0].question_helpfulness + 1;
+    })
+    .then((updatedHelpfulness) => {
+      return db.any('UPDATE questions SET question_helpfulness = $2 WHERE question_id = $1', [questionID, updatedHelpfulness])
+        .then(() => {
+          return 204;
+        })
+        .catch((err) => {
+          console.log('Error updating helpfulness: ', err)
+          return 500;
+        })
+    })
+    .catch((err) => {
+      console.log('Error selecting question helpfulness:', err);
+      return 404;
+    })
+};
+
 module.exports = {
   getQuestions,
   getAnswers,
   postQuestion,
-  postAnswer
+  postAnswer,
+  putQuestionHelpfulness,
 }
