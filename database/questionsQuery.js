@@ -9,25 +9,61 @@ var getQuestions = async (productID) => {
       return questions;
     })
     .catch((err) => {
-      console.log('Error in getQuestions: ', err)
+      return err;
     })
-}
+};
 
 var getAnswers = async (questionID) => {
   return db.any('SELECT answer_id, body, date, answerer_name, helpfulness FROM answers WHERE question_id = $1', [questionID])
     .then ((answers) => {
-      return (answers);
+      return answers;
     })
     .catch((err) => {
-      console.log('Error in getAnswers: ', err)
+      return err;
     })
-}
+};
 
-// var addQuestions = async (productID) => {
-//   await db.none('INSERT INTO questions (product_id, body, date_written, asker_name, asker_email, reported, helpful) VALUES ($1, $2, $3, $4, $5, $6, $7)', [productID, *])
-// }
+var postQuestion = async (question) => {
+  let date = new Date;
+  return db.any("SELECT setval('questions_question_id_seq', max(question_id)) FROM questions;")
+    .then(() => {
+      return db.none('INSERT INTO questions (product_id, question_body, asker_name, asker_email, question_helpfulness, reported, question_date) VALUES ($1, $2, $3, $4, $5, $6, $7)', [question.product_id, question.body, question.name, question.email, 0, 0, date])
+        .then(() => {
+          return 201;
+        })
+        .catch((err) => {
+          console.log('Error inserting question: ', err)
+          return 500;
+        })
+    })
+    .catch((err) => {
+      console.log('Error setting question id: ', err)
+      return 500;
+    })
+};
+
+var postAnswer = async (questionID, answer) => {
+  let date = new Date;
+  return db.any("SELECT setval('answers_answer_id_seq', max(answer_id)) FROM answers;")
+    .then(() => {
+      return db.none('INSERT INTO answers (question_id, body, answerer_name, answerer_email, helpfulness, reported, date) VALUES ($1, $2, $3, $4, $5, $6, $7)', [questionID, answer.body, answer.name, answer.email, 0, 0, date])
+        .then(() => {
+          return 201;
+        })
+        .catch((err) => {
+          console.log('Error inserting answer: ', err)
+          return 500;
+        })
+    })
+    .catch((err) => {
+      console.log('Error setting answer id: ', err)
+      return 500;
+    })
+};
 
 module.exports = {
   getQuestions,
-  getAnswers
+  getAnswers,
+  postQuestion,
+  postAnswer
 }

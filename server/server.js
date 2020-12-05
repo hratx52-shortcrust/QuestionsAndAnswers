@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-const { getQuestions, getAnswers } = require('../database/questionsQuery')
+const { getQuestions, getAnswers, postQuestion, postAnswer } = require('../database/questionsQuery')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,11 +18,13 @@ app.get('/qa/questions', async (req, res) => {
   var questionQuery = {
     product_id: productID
   }
+
   questionQuery.results = await getQuestions(productID);
-
-  res.send(questionQuery).status(200);
-
-  //response status 200
+  if (questionQuery.results.name === 'error') {
+    res.sendStatus(404);
+  } else {
+    res.send(questionQuery).status(200);
+  }
 });
 
 //Answers List
@@ -36,28 +38,27 @@ app.get('/qa/questions/:question_id/answers', async (req, res) => {
     count: count
   }
   answerQuery.results = await getAnswers(questionID);
-  res.send(answerQuery).status(200);
 
-
-  //response status 200
+  if (answerQuery.results.name === 'error') {
+    res.sendStatus(404);
+  } else {
+    res.send(answerQuery).status(200);
+  }
 });
 
 //Add a Question
-app.post('/qa/questions', (req, res) => {
-console.log(req.body);
-  // Body parameters: {
-  //   body,
-  //   name,
-  //   email,
-  //   product_id
-  // }
-
-  //response status 201
+app.post('/qa/questions', async (req, res) => {
+  var postedQuestion = await postQuestion(req.body);
+  res.sendStatus(postedQuestion);
 });
 
 //Add an Answer
-app.post('/qa/questions/:question_id/answers', (req, res) => {
+app.post('/qa/questions/:question_id/answers', async (req, res) => {
   let questionID = req.params.question_id;
+  var postedAnswer = await postAnswer(questionID, req.body);
+
+  res.sendStatus(postedAnswer);
+
   // Body parameters: {
   //   body,
   //   name,
