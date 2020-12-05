@@ -1,30 +1,50 @@
 const express = require('express')
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 const { getQuestions, getAnswers } = require('../database/questionsQuery')
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
 
+
 //List Questions
-app.get('/qa/questions', (req, res) => {
+app.get('/qa/questions', async (req, res) => {
   let productID = req.query.product_id;
-  var questionQuery = getQuestions(productID);
+  var questionQuery = {
+    product_id: productID
+  }
+  questionQuery.results = await getQuestions(productID);
+
+  res.send(questionQuery).status(200);
 
   //response status 200
 });
 
 //Answers List
-app.get('/qa/questions/:question_id/answers', (req, res) => {
+app.get('/qa/questions/:question_id/answers', async (req, res) => {
   let questionID = req.params.question_id;
-  var answerQuery = getAnswers(questionID);
+  let page = req.query.page || 1;
+  let count = req.query.count || 5
+  var answerQuery = {
+    question: questionID,
+    page: page,
+    count: count
+  }
+  answerQuery.results = await getAnswers(questionID);
+  res.send(answerQuery).status(200);
+
 
   //response status 200
 });
 
 //Add a Question
 app.post('/qa/questions', (req, res) => {
+console.log(req.body);
   // Body parameters: {
   //   body,
   //   name,

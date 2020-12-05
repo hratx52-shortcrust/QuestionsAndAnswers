@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./server/server.js",
-    "checkQueries": "node ./database/questionsQuery.js"
+    "checkQueries": "node ./database/questionsQuery.js",
+    "load": "node ./ETL/QuestionsETL.js"
   },
   "repository": {
     "type": "git",
