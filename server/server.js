@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-const { getQuestions, getAnswers, postQuestion, postAnswer, putQuestionHelpfulness } = require('../database/questionsQuery')
+const { getQuestions, getAnswers, postQuestion, postAnswer, putQuestionHelpfulness, putAnswerHelpfulness, putReportQuestion, putReportAnswer } = require('../database/questionsQuery')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -48,25 +48,25 @@ app.get('/qa/questions/:question_id/answers', async (req, res) => {
 
 //Add a Question
 app.post('/qa/questions', async (req, res) => {
-  var postedQuestion = await postQuestion(req.body);
-  res.sendStatus(postedQuestion);
+  var postedQuestionStatus = await postQuestion(req.body);
+  res.sendStatus(postedQuestionStatus);
 });
 
 //Add an Answer
 app.post('/qa/questions/:question_id/answers', async (req, res) => {
   let questionID = req.params.question_id;
-  var postedAnswer = await postAnswer(questionID, req.body);
+  var postedAnswerStatus = await postAnswer(questionID, req.body);
 
-  res.sendStatus(postedAnswer);
+  res.sendStatus(postedAnswerStatus);
 
 });
 
 //Mark Question as Helpful
 app.put('/qa/questions/:question_id/helpful', async (req, res) => {
   let questionID = req.params.question_id;
-  var updatedQuestionHelpfulness = await putQuestionHelpfulness(questionID)
+  var updatedQuestionHelpfulnessStatus = await putQuestionHelpfulness(questionID)
 
-  res.sendStatus(updatedQuestionHelpfulness);
+  res.sendStatus(updatedQuestionHelpfulnessStatus);
 
   //response status 204
 });
@@ -74,6 +74,9 @@ app.put('/qa/questions/:question_id/helpful', async (req, res) => {
 //Report Question
 app.put('/qa/questions/:question_id/report', async (req, res) => {
   let questionID = req.params.question_id;
+  var reportedQuestionStatus = await putReportQuestion(questionID)
+
+  res.sendStatus(reportedQuestionStatus);
 
   //response status 204
 });
@@ -81,6 +84,9 @@ app.put('/qa/questions/:question_id/report', async (req, res) => {
 //Mark Answer as Helpful
 app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
   let answerID = req.params.question_id;
+  var updatedAnswerHelpfulnessStatus = await putAnswerHelpfulness(answerID);
+
+  res.sendStatus(updatedAnswerHelpfulnessStatus);
 
   //response status 204
 });
@@ -88,6 +94,9 @@ app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
 //Report Answer
 app.put('/qa/questions/:answer_id/report', async (req, res) => {
   let answerID = req.params.question_id;
+  var reportedAnswerStatus = await putReportAnswer(answerID);
+
+  res.sendStatus(reportedAnswerStatus)
 
   //response status 204
 });
