@@ -14,7 +14,6 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
 
-
 //List Questions
 app.get('/qa/questions', async (req, res) => {
   let productID = req.query.product_id;
@@ -85,15 +84,15 @@ app.put('/qa/questions/:question_id/report', async (req, res) => {
 
 //Mark Answer as Helpful
 app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
-  let answerID = req.params.question_id;
+  let answerID = req.params.answer_id;
   var updatedAnswerHelpfulnessStatus = await putAnswerHelpfulness(answerID);
 
   res.sendStatus(updatedAnswerHelpfulnessStatus);
 });
 
 //Report Answer
-app.put('/qa/questions/:answer_id/report', async (req, res) => {
-  let answerID = req.params.question_id;
+app.put('/qa/answers/:answer_id/report', async (req, res) => {
+  let answerID = req.params.answer_id;
   var reportedAnswerStatus = await putReportAnswer(answerID);
 
   res.sendStatus(reportedAnswerStatus)

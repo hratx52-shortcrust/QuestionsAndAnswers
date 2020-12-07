@@ -3,6 +3,7 @@ const pgp = require('pg-promise')(/*options*/);
 
 var db = pgp(`postgres://${username}:${password}@localhost:5433/sdc`);
 
+
 var getQuestions = async (productID) => {
   return db.any('SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported FROM questions WHERE product_id = $1 AND reported = $2', [productID, 0])
     .then((questions) => {
@@ -11,20 +12,20 @@ var getQuestions = async (productID) => {
     .catch((err) => {
       return err;
     })
-};
+  };
 
-var getAnswers = async (questionID) => {
+  var getAnswers = async (questionID) => {
   return db.any('SELECT answer_id, body, date, answerer_name, helpfulness FROM answers WHERE question_id = $1 AND reported = $2', [questionID, 0])
-    .then ((answers) => {
-      return answers;
-    })
-    .catch((err) => {
+  .then ((answers) => {
+    return answers;
+  })
+  .catch((err) => {
       return err;
     })
-};
+  };
 
-var getAnswerPhotos = async (answerID) => {
-  return db.any('SELECT id, url FROM answers_photos WHERE answer_id = $1', [answerID])
+  var getAnswerPhotos = async (answerID) => {
+    return db.any('SELECT id, url FROM answers_photos WHERE answer_id = $1', [answerID])
     .then((photos) => {
       return photos;
     })
@@ -32,7 +33,7 @@ var getAnswerPhotos = async (answerID) => {
       console.log('Error getting answer photos: ', err)
       return [];
     })
-}
+  }
 
 var postQuestion = async (question) => {
   let date = new Date;
@@ -166,5 +167,5 @@ module.exports = {
   putAnswerHelpfulness,
   putReportQuestion,
   putReportAnswer,
-  getAnswerPhotos
+  getAnswerPhotos,
 }
