@@ -23,6 +23,17 @@ var getAnswers = async (questionID) => {
     })
 };
 
+var getAnswerPhotos = async (answerID) => {
+  return db.any('SELECT id, url FROM answers_photos WHERE answer_id = $1', [answerID])
+    .then((photos) => {
+      return photos;
+    })
+    .catch((err) => {
+      console.log('Error getting answer photos: ', err)
+      return [];
+    })
+}
+
 var postQuestion = async (question) => {
   let date = new Date;
   return db.any("SELECT setval('questions_question_id_seq', max(question_id)) FROM questions;")
@@ -154,5 +165,6 @@ module.exports = {
   putQuestionHelpfulness,
   putAnswerHelpfulness,
   putReportQuestion,
-  putReportAnswer
+  putReportAnswer,
+  getAnswerPhotos
 }
