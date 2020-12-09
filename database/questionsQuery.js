@@ -14,6 +14,16 @@ var getQuestions = async (productID) => {
     })
   };
 
+var getSpecificQuestion = async (questionID) => {
+  return db.any('SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported FROM questions WHERE question_id = $1', [questionID, 0])
+    .then((questions) => {
+      return questions;
+    })
+    .catch((err) => {
+      return err;
+    })
+  };
+
   var getAnswers = async (questionID) => {
   return db.any('SELECT answer_id, body, date, answerer_name, helpfulness FROM answers WHERE question_id = $1 AND reported = $2', [questionID, 0])
   .then ((answers) => {
@@ -23,6 +33,16 @@ var getQuestions = async (productID) => {
       return err;
     })
   };
+
+  var getSpecificAnswers = async (answerID) => {
+    return db.any('SELECT answer_id, body, date, answerer_name, helpfulness FROM answers WHERE answer_id = $1', [answerID])
+    .then ((answers) => {
+      return answers;
+    })
+    .catch((err) => {
+        return err;
+      })
+    };
 
   var getAnswerPhotos = async (answerID) => {
     return db.any('SELECT id, url FROM answers_photos WHERE answer_id = $1', [answerID])
@@ -168,4 +188,6 @@ module.exports = {
   putReportQuestion,
   putReportAnswer,
   getAnswerPhotos,
+  getSpecificQuestion,
+  getSpecificAnswers
 }
