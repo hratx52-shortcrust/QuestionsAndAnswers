@@ -1,0 +1,27 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 20
+      arrivalRate: 5
+      name: Warm up
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 100
+      name: Ramp up load
+    - duration: 60
+      arrivalRate: 100
+      name: Sustained load
+    - duration: 180
+      arrivalRate: 100
+      rampTo: 1000
+      name: Max out
+scenarios:
+  # We define one scenario:
+  - name: "Check out products Q&A"
+    flow:
+      - get:
+          url: "/qa/questions?product_id={{ $randomNumber(1, 3000000) }}"
+      - get:
+          url: "/qa/questions/{{ $randomNumber(1, 12000000) }}/answers"
+      - think: 3
+

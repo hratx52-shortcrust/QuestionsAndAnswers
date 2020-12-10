@@ -74,12 +74,17 @@ var postQuestion = async (question) => {
     })
 };
 
-//MAY NEED TO REFACTOR - ANSWER MAY BE POSTED WITH A PHOTO
+
 var postAnswer = async (questionID, answer) => {
   let date = new Date;
   return db.any("SELECT setval('answers_answer_id_seq', max(answer_id)) FROM answers;")
-    .then(() => {
-      return db.none('INSERT INTO answers (question_id, body, answerer_name, answerer_email, helpfulness, reported, date) VALUES ($1, $2, $3, $4, $5, $6, $7)', [questionID, answer.body, answer.name, answer.email, 0, 0, date])
+    .then(async (value) => {
+      await db.none('INSERT INTO answers (question_id, body, answerer_name, answerer_email, helpfulness, reported, date) VALUES ($1, $2, $3, $4, $5, $6, $7);', [questionID, answer.body, answer.name, answer.email, 0, 0, date])
+      var answerID = value[0].setval
+      var id = await db.any("SELECT setval('answers_photos_id_seq', max(id)) FROM answers_photos;")
+      id = parseInt(id[0].setval) + 1;
+      return db.none('INSERT INTO answers_photos (id, answer_id, url) VALUES ($1, $2, $3);', [id , answerID, answer.photos])
+    })
         .then(() => {
           return 201;
         })
@@ -87,7 +92,6 @@ var postAnswer = async (questionID, answer) => {
           console.log('Error inserting answer: ', err)
           return 500;
         })
-    })
     .catch((err) => {
       console.log('Error setting answer id: ', err)
       return 500;

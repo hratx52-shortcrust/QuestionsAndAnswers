@@ -7,7 +7,8 @@
     "test": "jest",
     "start": "nodemon ./server/server.js",
     "checkQueries": "node ./database/questionsQuery.js",
-    "load": "node ./ETL/QuestionsETL.js"
+    "load": "node ./ETL/QuestionsETL.js",
+    "stress": "artillery run loadQuestionsAnswersAndPhotos.yml"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,11 @@
   },
   "homepage": "https://github.com/hratx52-shortcrust/QuestionsAndAnswers#readme",
   "dependencies": {
+    "artillery": "^1.6.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jest": "^26.6.3",
+    "newrelic": "^7.0.2",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
     "pg-promise": "^10.8.1"
