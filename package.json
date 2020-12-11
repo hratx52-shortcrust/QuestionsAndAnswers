@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon ./server/server.js",
-    "checkQueries": "node ./database/questionsQuery.js",
     "load": "node ./ETL/QuestionsETL.js",
     "stress": "artillery run loadQuestionsAnswersAndPhotos.yml"
   },
