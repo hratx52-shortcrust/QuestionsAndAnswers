@@ -8,6 +8,8 @@ A service for retrieving, posting and updating questions and answers for an appa
 
 * Able to extract and transform questions and answers from an existing database and load into a newly created PostgreSQL database
 
+* Service using Node.js and Express
+
 * Provides routes for:
   * Retrieving questions
   * Retrieving answers
@@ -23,6 +25,8 @@ A service for retrieving, posting and updating questions and answers for an appa
 * Optimized database queries
 
 * Median reponse time under 10 ms with more than 400 requests per second for retrieving questions and answers
+
+* Stress testing using Artillery and NewRelic
 
 ### Installation
 Run: npm install
