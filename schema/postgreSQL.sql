@@ -50,3 +50,7 @@ CREATE TABLE answers_photos(
     FOREIGN KEY(answer_id)
       REFERENCES answers(answer_id)
 );
+
+CREATE INDEX question_index ON questions (product_id);
+CREATE INDEX answer_index ON answers (question_id);
+CREATE INDEX answerphoto_index ON answers (answer_id);

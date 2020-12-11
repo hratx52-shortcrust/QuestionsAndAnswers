@@ -31,6 +31,11 @@ createTables = async function () {
       await db.none("COPY answers_photos(id, answer_id, url) FROM 'C:/Users/Public/answers_photos.csv' DELIMITER ',' CSV HEADER;")
     })
     .then(async () => {
+      await db.none('CREATE INDEX question_index ON questions (product_id);')
+      await db.none('CREATE INDEX answer_index ON answers (question_id);')
+      await db.none('CREATE INDEX answerphoto_index ON answers (answer_id);')
+    })
+    .then(async () => {
       await console.log("DONE");
     })
     .catch((err) => {
