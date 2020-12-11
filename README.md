@@ -28,15 +28,15 @@ A service for retrieving, posting and updating questions and answers for an appa
 Run: npm install
 
 ### Usage
-To start the server: npm start
-To run test suite: npm test
-To create a database and import data from CSV files: npm run load
-To stress test: npm run stress
+* To start the server: npm start
+* To run test suite: npm test
+* To create a database and import data from CSV files: npm run load
+* To stress test: npm run stress
 
 ### Team
-Shortcrust : https://github.com/hratx52-shortcrust
-David Lichter : https://github.com/davidlichter
-Jesse Pye : https://github.com/jessepye
+* Shortcrust : https://github.com/hratx52-shortcrust
+* David Lichter : https://github.com/davidlichter
+* Jesse Pye : https://github.com/jessepye
 
 ### Roadmap
 Deployment to Amazon Web Services using EC2
