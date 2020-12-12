@@ -1,7 +1,12 @@
-// const fs = require('fs')
 const pgp = require('pg-promise')(/*options*/);
+require('dotenv').config();
+const host = process.env.HOST;
+const database = process.env.DATABASE;
+const port = process.env.PORT;
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
 
-var db = pgp('postgres://dlichter:hackreactor@localhost:5433/sdc');
+var db = pgp(`postgres://${username}:${password}@${host}:${port}/${database}`);
 
 
 createTables = async function () {

@@ -1,8 +1,12 @@
-const { username, password } = require('../config.js');
 const pgp = require('pg-promise')(/*options*/);
+require('dotenv').config();
+const host = process.env.HOST;
+const database = process.env.DATABASE;
+const port = process.env.PORT;
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
 
-var db = pgp(`postgres://${username}:${password}@localhost:5433/sdc`);
-
+var db = pgp(`postgres://${username}:${password}@${host}:${port}/${database}`);
 
 var getQuestions = async (productID) => {
   return db.any('SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported FROM questions WHERE product_id = $1 AND reported = $2', [productID, 0])

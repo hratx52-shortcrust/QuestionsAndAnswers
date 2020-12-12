@@ -1,3 +1,5 @@
 node_modules
 CSV
 newrelic.js
+.env
+config.js
